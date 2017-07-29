@@ -221,7 +221,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Tap was beneath the original opening Location (LongPress)
         else if (i == 1){
             // the counter will be set up if it is still smaller than the size and the list but bigger than half the size of the list.
-            if ((counter + 1) <= (list.size()) && (counter > (list.size() - 1) / 2)) {
+            if ((counter + 1) < (list.size()) && (counter > (list.size() - 1) / 2)) {
                 counter++;
             } else {
                 // if the counter is smaller than half the size of the list, it will be set on half the size of the list + 1;
