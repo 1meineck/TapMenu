@@ -6,12 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".MapsActivity">
 
+    <FrameLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/mapLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="75dp"
-        android:layout_height="495dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         tools:context=".MapsActivity"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp"
@@ -19,11 +30,6 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true" />
-
-    <FrameLayout
-        android:id="@+id/layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
     </FrameLayout>
 
