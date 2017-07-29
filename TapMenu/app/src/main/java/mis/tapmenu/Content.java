@@ -1,16 +1,21 @@
 package mis.tapmenu;
 
 import android.graphics.Point;
-
 import com.google.android.gms.maps.model.LatLng;
-
 import java.util.ArrayList;
 
 /**
- * Created by annika on 21.07.17.
+ * The Content class provides the structure for the Country and City Objects needed for the TapMenu
+ * It consists of a String, the name of the Object (e.g. Paris)
+ * A LatLng position, the location of the Object on the map
+ * A zoom Factor, to tell the map, how far to zoom in
+ * An image which stands for the country/city and is shown as its symbol in the menu
+ * An image_selected which symbolizes the object in the menu, if the object is selected,
+ * A point that indicates the location of the images on the display
+ * A ArrayList with the next level of the menu, if it exists.
  */
 
-public class Content {
+class Content {
     private String name;
     private LatLng latLng;
     private float zoom;
@@ -19,7 +24,7 @@ public class Content {
     private Point location;
     private ArrayList<Content> nextList;
 
-    public Content(String name, LatLng latLng, float zoom, int image, int image_selected, Point location, ArrayList<Content> nextList){
+    Content(String name, LatLng latLng, float zoom, int image, int image_selected, Point location, ArrayList<Content> nextList){
         this.name = name;
         this.latLng = latLng;
         this.zoom = zoom;
@@ -29,30 +34,35 @@ public class Content {
         this.nextList = nextList;
     }
 
-    public String getName(){
+
+    /*
+    getter-methods for the Objects of Class Content
+     */
+
+    String getName(){
         return name;
     }
 
-    public LatLng getLatLng(){
+    LatLng getLatLng(){
         return latLng;
     }
 
-    public float getZoomFactor(){
+    float getZoomFactor(){
         return zoom;
     }
 
-    public int getImageIndex(){
+    int getImageIndex(){
         return image;
     }
 
-    public int getImage_selectedIndex(){
+    int getImage_selectedIndex(){
         return image_selected;
     }
 
-    public  Point getLocation(){
+    Point getLocation(){
         return location;
     }
-    public ArrayList<Content> getNextList(){
+    ArrayList<Content> getNextList(){
         return nextList;
     }
 

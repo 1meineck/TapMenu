@@ -11,15 +11,15 @@ import android.view.ViewOverlay;
 import java.util.ArrayList;
 
 /**
- * Created by annika on 21.07.17.
+ * The HandleDrawables provides methods with which the TapMenu can be drawn. It takes the structure of objects of the class Content into account.
  */
 
-public class HandleDrawables {
+class HandleDrawables {
 
-    int displayWidth;
-    int displayHeight;
-    Resources resources;
-    ViewOverlay viewOverlay;
+    private int displayWidth;
+    private int displayHeight;
+    private Resources resources;
+    private ViewOverlay viewOverlay;
 
     private static final int okAreaSize = 75; // defines the size of the area where an item can be selected
     private static final int areaSize = 400; // defines the size of the area where one needs to tap to iterate through the items
@@ -34,8 +34,9 @@ public class HandleDrawables {
     private static final Point middleLocation = new Point(-50, -50);
 
     private ArrayList<Drawable> drawables; // List of all drawables currently on the overlay (not including middledrawable)
+    private Drawable selectedDrawable;
 
-    public HandleDrawables(Resources resources, ViewOverlay viewOverlay, int displayWidth, int displayHeight) {
+    HandleDrawables(Resources resources, ViewOverlay viewOverlay, int displayWidth, int displayHeight) {
         this.displayWidth = displayWidth;
         this.displayHeight = displayHeight;
         this.resources = resources;
@@ -49,7 +50,7 @@ public class HandleDrawables {
     draws the selection Area consisting of the Tapping area (area) and the selection Are (okArea).
     The Location is specified by xLongPress and yLongPress.
      */
-    public void drawSelectionArea(float xLongPress, float yLongPress) {
+    void drawSelectionArea(float xLongPress, float yLongPress) {
         areaDrawable = new ShapeDrawable(new OvalShape());
         areaDrawable.getPaint().setARGB(100, 200, 200, 200);
         areaDrawable.setBounds((int) xLongPress - areaSize, (int) yLongPress - areaSize, (int) xLongPress + areaSize, (int) yLongPress + areaSize);
@@ -62,9 +63,17 @@ public class HandleDrawables {
     }
 
     /*
+    removes the selection area
+     */
+    private void removeSelectionArea(){
+        viewOverlay.remove(areaDrawable);
+        viewOverlay.remove(okAreaDrawable);
+    }
+
+    /*
     draws the Diagram from a Content object with one item at a specific index selected in the List of the next Items
      */
-    public void drawDiagramArea(Content content, int index) {
+    void drawDiagramArea(Content content, int index) {
         drawBasicDiagram(content);
         ArrayList<Content> list = content.getNextList();
         setDrawableActive(list.get(index));
@@ -73,7 +82,7 @@ public class HandleDrawables {
     /*
     draws the basic diagram (with no selected items) from a given element of the class content.
      */
-    public void drawBasicDiagram(Content content) {
+    private void drawBasicDiagram(Content content) {
         middleDrawable = getDrawableSelected(content); // the middle of the diagram is illustrated by the image_selected
         setDrawable(middleDrawable, middleLocation, middleSize); // the middle drawable is drawn at the middleLocation in its specified size;
         //To draw the rest of the diagram the ArrayList with the following elements gets extracted. For every Element of the list, The image is drawn at the Location specified in the Content class.
@@ -88,19 +97,22 @@ public class HandleDrawables {
     /*
    removes the normal image of a Content object and replaces it with the image_selected
     */
-    public void setDrawableActive(Content content) {
+    void setDrawableActive(Content content) {
         Drawable drawable = getDrawable(content);
         viewOverlay.remove(drawable);
         drawables.remove(drawable);
-        Drawable drawableSelected = getDrawableSelected(content);
-        setDrawable(drawableSelected, content.getLocation(), iconSize);
-        drawables.add(drawableSelected);
+        if (selectedDrawable != null){
+            viewOverlay.remove(selectedDrawable);
+        }
+        selectedDrawable = getDrawableSelected(content);
+        setDrawable(selectedDrawable, content.getLocation(), iconSize);
+        drawables.add(selectedDrawable);
     }
 
     /*
     setDrawable draws an image on the overlay at the specified Location point, relative to the width and height of the display, in a given size.
      */
-    public void setDrawable(Drawable drawable, Point point, int size) {
+    private void setDrawable(Drawable drawable, Point point, int size) {
         int x = displayWidth / 2 + point.x;
         int y = displayHeight / 4 + point.y;
         drawable.setBounds(x - size / 2, y - size / 2, x + size / 2, y + size / 2);
@@ -111,34 +123,32 @@ public class HandleDrawables {
     /*
     Takes the index of an image from a Content object and gets the actual Drawable from the resources
      */
-    public Drawable getDrawable(Content content) {
-        Drawable drawable = ResourcesCompat.getDrawable(resources, content.getImageIndex(), null);
-        return drawable;
+    private Drawable getDrawable(Content content) {
+        return ResourcesCompat.getDrawable(resources, content.getImageIndex(), null);
     }
 
     /*
    Takes the index of an image_selected from a Content object and gets the actual Drawable from the resources
     */
-    public Drawable getDrawableSelected(Content content) {
-        Drawable drawable = ResourcesCompat.getDrawable(resources, content.getImage_selectedIndex(), null);
-        return drawable;
+    private Drawable getDrawableSelected(Content content) {
+        return ResourcesCompat.getDrawable(resources, content.getImage_selectedIndex(), null);
     }
 
     /*
     removes all drawables in the ArrayList drawables from the overlay and clears the list.
      */
-    public void removeDrawables() {
+    void removeDrawables() {
         for (Drawable drawable : drawables) {
             viewOverlay.remove(drawable);
         }
         drawables.clear();
     }
 
-    /*
-    removes all overlays
-     */
-    public void clearOverlay() {
-        viewOverlay.clear();
+    // removes the complete TapMenu, all Drawables and the selection Area
+    void removeTapMenu(){
+        removeDrawables();
+        removeSelectionArea();
+        viewOverlay.remove(middleDrawable);
     }
 
 }

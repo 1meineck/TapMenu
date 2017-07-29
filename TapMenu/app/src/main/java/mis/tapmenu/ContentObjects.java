@@ -1,42 +1,36 @@
 package mis.tapmenu;
 
 import android.graphics.Point;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
-
 import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 
 
 /**
- * Created by annika on 19.07.17.
+ * The ContentObjects class provides the overall Structure of the TapMenu by implementing an Object of the class Content that implements every level of the TapMenu.
  */
 
-public class ContentObjects {
+class ContentObjects {
 
-   private ArrayList<Content> countriesList;
-   private Content countries;
-   private Point middleLocation;
-   private Point item1Location;
-   private Point item2Location;
-   private Point item3Location;
-   private Point item4Location;
-   private Point item5Location;
-   private Point item6Location;
+    private Content countries;
+    private Point item1Location;
+    private Point item2Location;
+    private Point item3Location;
+    private Point item4Location;
+    private Point item5Location;
+    private Point item6Location;
 
 
+    ContentObjects() {
 
-   public ContentObjects(){
+        Point middleLocation = new Point(-50, -50);
+        item1Location = new Point(-225, -200);
+        item2Location = new Point(-50, -275);
+        item3Location = new Point(+125, -200);
+        item4Location = new Point(-225, 100);
+        item5Location = new Point(-50, 175);
+        item6Location = new Point(+125, 100);
 
-       middleLocation = new Point(-50, -50);
-       item1Location = new Point(-225, -200);
-       item2Location = new Point(-50, -275);
-       item3Location = new Point(+125, -200);
-       item4Location = new Point(-225, 100);
-       item5Location = new Point(-50, 175);
-       item6Location = new Point(+125, 100);
-
-        countriesList = new ArrayList<>();
+        ArrayList<Content> countriesList = new ArrayList<>();
         countriesList.add(createFrance());
         countriesList.add(createGermany());
         countriesList.add(createGreece());
@@ -45,11 +39,11 @@ public class ContentObjects {
         countriesList.add(createSpain());
 
 
-       countries = new Content("Countries", new LatLng(0, 0), 0, R.drawable.france, R.drawable.france_selected, middleLocation, countriesList); //ToDo: new drawable!!
+        countries = new Content("Countries", new LatLng(0, 0), 0, R.drawable.france, R.drawable.france_selected, middleLocation, countriesList); //ToDo: new drawable!!
 
     }
 
-    public Content getCountries(){
+    Content getCountries() {
         return countries;
     }
 
@@ -64,7 +58,7 @@ public class ContentObjects {
         LatLng cannesCoordinates = new LatLng(43.552849, 7.017369);
         LatLng avignonCoordinates = new LatLng(43.94834, 4.80892);
 
-        // Content Classes of French Cities
+        // creates Content objects for each French city
         Content paris = new Content("Paris", parisCoordinates, 10, R.drawable.france_paris, R.drawable.france_paris_selected, item1Location, null);
         Content lyon = new Content("Lyon", lyonCoordinates, 10, R.drawable.france_lyon, R.drawable.france_lyon_selected, item2Location, null);
         Content marseilles = new Content("Marseilles", marseillesCoordinates, 10, R.drawable.france_marseilles, R.drawable.france_marseilles_selected, item3Location, null);
@@ -72,7 +66,7 @@ public class ContentObjects {
         Content cannes = new Content("Cannes", cannesCoordinates, 10, R.drawable.france_cannes, R.drawable.france_cannes_selected, item5Location, null);
         Content avignon = new Content("Avignon", avignonCoordinates, 10, R.drawable.france_avignon, R.drawable.france_avignon_selected, item6Location, null);
 
-        // Content classes of French cities in an ArrayList.
+        // puts all Content objects of French cities in an ArrayList
         ArrayList<Content> franceCities = new ArrayList<>();
         franceCities.add(paris);
         franceCities.add(lyon);
@@ -81,10 +75,8 @@ public class ContentObjects {
         franceCities.add(cannes);
         franceCities.add(avignon);
 
-        // Content class of France
-        Content france = new Content("France", franceCoordinates, 5, R.drawable.france, R.drawable.france_selected, item1Location, franceCities);
-
-        return france;
+        // returns Content object of France with ArrayList of French cities as nextList.
+        return new Content("France", franceCoordinates, 5, R.drawable.france, R.drawable.france_selected, item1Location, franceCities);
     }
 
     private Content createGermany() {
@@ -98,6 +90,7 @@ public class ContentObjects {
         LatLng frankfurtCoordinates = new LatLng(52.34714, 14.55062);
         LatLng weimarCoordinates = new LatLng(50.978516, 11.332221);
 
+        // creates Content objects for each German city
         Content berlin = new Content("Berlin", berlinCoordinates, 10, R.drawable.germany_berlin, R.drawable.germany_berlin_selected, item1Location, null);
         Content munich = new Content("Munich", munichCoordinates, 10, R.drawable.germany_muenchen, R.drawable.germany_muenchen_selected, item2Location, null);
         Content hamburg = new Content("Hamburg", hamburgCoordinates, 10, R.drawable.germany_hamburg, R.drawable.germany_hamburg_selected, item3Location, null);
@@ -105,6 +98,7 @@ public class ContentObjects {
         Content frankfurt = new Content("Frankfurt", frankfurtCoordinates, 11, R.drawable.germany_frankfurt, R.drawable.germany_frankfurt_selected, item5Location, null);
         Content weimar = new Content("Weimar", weimarCoordinates, 12, R.drawable.germany_weimar, R.drawable.germany_weimar_selected, item6Location, null);
 
+        // puts all Content objects of German cities in an ArrayList
         ArrayList<Content> germanyCities = new ArrayList<>();
         germanyCities.add(berlin);
         germanyCities.add(munich);
@@ -113,14 +107,13 @@ public class ContentObjects {
         germanyCities.add(frankfurt);
         germanyCities.add(weimar);
 
-        Content germany = new Content("Germany", germanyCoordinates, 5, R.drawable.germany, R.drawable.germany_selected, item2Location, germanyCities);
-
-        return germany;
+        // returns Content object of Germany with ArrayList of German cities as nextList.
+        return new Content("Germany", germanyCoordinates, 5, R.drawable.germany, R.drawable.germany_selected, item2Location, germanyCities);
 
     }
 
     private Content createGreece() {
-
+        // Coordinates of Greeece and Greece cities
         LatLng greeceCoordinates = new LatLng(39, 24);
         LatLng athensCoordinates = new LatLng(37.97945, 23.71622);
         LatLng rhodesCoordinates = new LatLng(36.4349631, 28.2174829);
@@ -129,6 +122,7 @@ public class ContentObjects {
         LatLng spartaCoordinates = new LatLng(37.07583303, 22.42083165);
         LatLng thessalonikiCoordinates = new LatLng(40.64361, 22.93086);
 
+        // creates Content objects for each Greece city
         Content athens = new Content("Athens", athensCoordinates, 10, R.drawable.greece_athens, R.drawable.greece_athens_selected, item1Location, null);
         Content rhodes = new Content("Rhodes", rhodesCoordinates, 10, R.drawable.greece_rhodes, R.drawable.greece_rhodes_selected, item2Location, null);
         Content delphi = new Content("Delphi", delphiCoordinates, 10, R.drawable.greece_delphi, R.drawable.greece_delphi_selected, item3Location, null);
@@ -136,6 +130,7 @@ public class ContentObjects {
         Content sparta = new Content("Sparta", spartaCoordinates, 10, R.drawable.greece_sparta, R.drawable.greece_sparta_selected, item5Location, null);
         Content thessaloniki = new Content("Thessaloniki", thessalonikiCoordinates, 10, R.drawable.greece_thessaloniki, R.drawable.greece_thessaloniki_selected, item6Location, null);
 
+        // puts all Content objects of Greece cities in an ArrayList
         ArrayList<Content> greeceCities = new ArrayList<>();
         greeceCities.add(athens);
         greeceCities.add(rhodes);
@@ -144,13 +139,12 @@ public class ContentObjects {
         greeceCities.add(sparta);
         greeceCities.add(thessaloniki);
 
-        Content greece = new Content("Greece", greeceCoordinates, 5, R.drawable.greece, R.drawable.greece_selected, item3Location, greeceCities);
-
-        return greece;
+        // returns Content object of Greece with ArrayList of Greece cities as nextList.
+        return new Content("Greece", greeceCoordinates, 5, R.drawable.greece, R.drawable.greece_selected, item3Location, greeceCities);
     }
 
     private Content createItaly() {
-
+        // coordinates of Italy and Italian cities
         LatLng italyCoordinates = new LatLng(42.5, 12.5);
         LatLng romeCoordinates = new LatLng(41.89193, 12.51133);
         LatLng veniceCoordinates = new LatLng(45.43713, 12.33265);
@@ -159,6 +153,7 @@ public class ContentObjects {
         LatLng naplesCoordinates = new LatLng(40.85631, 14.24641);
         LatLng milanCoordinates = new LatLng(45.4654219, 9.1859243);
 
+        // creates Content objects for each Italian city
         Content rome = new Content("Rome", romeCoordinates, 10, R.drawable.italy_rome, R.drawable.italy_rome_selected, item1Location, null);
         Content venice = new Content("Venice", veniceCoordinates, 10, R.drawable.italy_venice, R.drawable.italy_venice_selected, item2Location, null);
         Content florence = new Content("Florence", florenceCoordinates, 10, R.drawable.italy_florence, R.drawable.italy_florence_selected, item3Location, null);
@@ -166,6 +161,7 @@ public class ContentObjects {
         Content naples = new Content("Naples", naplesCoordinates, 10, R.drawable.italy_naples, R.drawable.italy_naples_selected, item5Location, null);
         Content milan = new Content("Milan", milanCoordinates, 10, R.drawable.italy_milan, R.drawable.italy_milan_selected, item6Location, null);
 
+        // puts all Content objects of Italian cities in an ArrayList
         ArrayList<Content> italyCities = new ArrayList<>();
         italyCities.add(rome);
         italyCities.add(venice);
@@ -174,13 +170,13 @@ public class ContentObjects {
         italyCities.add(naples);
         italyCities.add(milan);
 
-        Content italy = new Content("Italy", italyCoordinates, 5, R.drawable.italy, R.drawable.italy_selected, item4Location, italyCities);
-
-        return italy;
+        // returns Content object of Italy with ArrayList of Italian cities as nextList.
+        return new Content("Italy", italyCoordinates, 5, R.drawable.italy, R.drawable.italy_selected, item4Location, italyCities);
     }
 
     private Content createPoland() {
 
+        //Coordinates of Poland and Polish cities
         LatLng polandCoordinates = new LatLng(52, 19);
         LatLng warsawCoordinates = new LatLng(52.22977, 21.01178);
         LatLng krakowCoordinates = new LatLng(50.06143, 19.93658);
@@ -189,6 +185,7 @@ public class ContentObjects {
         LatLng poznanCoordinates = new LatLng(52.40692, 16.92993);
         LatLng gdanskCoordinates = new LatLng(54.35205, 18.64637);
 
+        // creates Content objects for each Polish city
         Content warsaw = new Content("Warsaw", warsawCoordinates, 10, R.drawable.poland_warsaw, R.drawable.poland_warsaw_selected, item1Location, null);
         Content krakow = new Content("Krakow", krakowCoordinates, 10, R.drawable.poland_krakow, R.drawable.poland_krakow_selected, item2Location, null);
         Content lublin = new Content("Lublin", lublinCoordinates, 10, R.drawable.poland_lublin, R.drawable.poland_lublin_selected, item3Location, null);
@@ -196,6 +193,7 @@ public class ContentObjects {
         Content poznan = new Content("Poznan", poznanCoordinates, 10, R.drawable.poland_poznan, R.drawable.poland_poznan_selected, item5Location, null);
         Content gdansk = new Content("Gdansk", gdanskCoordinates, 10, R.drawable.poland_gdansk, R.drawable.poland_gdansk_selected, item6Location, null);
 
+        // puts all Content objects of Polish cities in an ArrayList
         ArrayList<Content> cities = new ArrayList<>();
         cities.add(warsaw);
         cities.add(krakow);
@@ -204,13 +202,13 @@ public class ContentObjects {
         cities.add(poznan);
         cities.add(gdansk);
 
-        Content poland = new Content("Poland", polandCoordinates, 5, R.drawable.poland, R.drawable.poland_selected, item5Location, cities);
-
-        return poland;
+        // returns Content object of Poland with ArrayList of Polish cities as nextList.
+        return new Content("Poland", polandCoordinates, 5, R.drawable.poland, R.drawable.poland_selected, item5Location, cities);
     }
 
     private Content createSpain() {
 
+        // Coordinates of Spain and Spanish cities
         LatLng spainCoordinates = new LatLng(40.5, -4);
         LatLng madridCoordinates = new LatLng(40.4165, -3.70256);
         LatLng barcelonaCoordinates = new LatLng(41.3850639, 2.1734035);
@@ -219,6 +217,7 @@ public class ContentObjects {
         LatLng palmaCoordinates = new LatLng(39.5722, 2.6529);
         LatLng valenciaCoordinates = new LatLng(39.46975, -0.37739);
 
+        // creates Content objects for each Spanish city
         Content madrid = new Content("Madrid", madridCoordinates, 10, R.drawable.spain_madrid, R.drawable.spain_madrid_selected, item1Location, null);
         Content barcelona = new Content("Barcelona", barcelonaCoordinates, 10, R.drawable.spain_barcelona, R.drawable.spain_barcelona_selected, item2Location, null);
         Content seville = new Content("Seville", sevilleCoordinates, 10, R.drawable.spain_seville, R.drawable.spain_seville_selected, item3Location, null);
@@ -226,6 +225,7 @@ public class ContentObjects {
         Content palma = new Content("Palma", palmaCoordinates, 10, R.drawable.spain_palma, R.drawable.spain_palma_selected, item5Location, null);
         Content valencia = new Content("Valencia", valenciaCoordinates, 10, R.drawable.spain_valencia, R.drawable.spain_valencia_selected, item6Location, null);
 
+        // puts all Content objects of Spanish cities in an ArrayList
         ArrayList<Content> cities = new ArrayList<>();
         cities.add(madrid);
         cities.add(barcelona);
@@ -234,9 +234,8 @@ public class ContentObjects {
         cities.add(palma);
         cities.add(valencia);
 
-        Content spain = new Content("Spain", spainCoordinates, 5, R.drawable.spain, R.drawable.spain_selected, item6Location, cities);
-
-        return spain;
+        // returns Content object of Spain with ArrayList of Spanish cities as nextList.
+        return new Content("Spain", spainCoordinates, 5, R.drawable.spain, R.drawable.spain_selected, item6Location, cities);
     }
 
 }
