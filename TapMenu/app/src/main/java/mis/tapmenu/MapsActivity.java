@@ -1,5 +1,6 @@
 package mis.tapmenu;
 
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.drawable.ShapeDrawable;
@@ -59,6 +60,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private HandleDrawables handleDrawables;
     private ShapeDrawable okLocation;
 
+    private SharedPreferences sharedPreferences;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,9 +74,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        sharedPreferences = getSharedPreferences("Preferences", MODE_PRIVATE);
+
         co = new ContentObjects(); // An Object of the class ContentObjects is created. ContentObjects defines the elements of the TapMenu
         active = false; // active is initially set to false because the Menu should only open on a longClick and is closed on the opening of the app.
-        drawSelectionDiagram = true; // drawSelectionDiagram is initially set to true, because in the beginning, the TapMenu should always be drawn in full
+        drawSelectionDiagram = sharedPreferences.getBoolean("menuEnabled", true); // get drawSelectionDiagram from sharedPreferences, initially set to true, because in the beginning, the TapMenu should always be drawn in full
         tapLayout = (FrameLayout) findViewById(R.id.layout); // the layout in which the TapMenu lies
         mapLayout = (FrameLayout) findViewById(R.id.mapLayout); // the layout with the maps
         viewOverlay = tapLayout.getOverlay();
@@ -208,18 +214,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @param list
     @param i
      */
-    private void setCounter(ArrayList<Content> list, int i){
+    private void setCounter(ArrayList<Content> list, int i) {
         //tap was over the Original opening Location (LongPress)
-        if (i == 0){
-        if ((counter + 1) <= ((list.size() - 1) / 2)) {
-            // the counter will be set up if it is still smaller than half the size of the list.
-            counter++;
-        } else {
-            // if the counter is bigger than half the size of the list, it will be set back to 0, to ensure iteration over only the top-half of the list.
-            counter = 0;
-        }}
+        if (i == 0) {
+            if ((counter + 1) <= ((list.size() - 1) / 2)) {
+                // the counter will be set up if it is still smaller than half the size of the list.
+                counter++;
+            } else {
+                // if the counter is bigger than half the size of the list, it will be set back to 0, to ensure iteration over only the top-half of the list.
+                counter = 0;
+            }
+        }
         // Tap was beneath the original opening Location (LongPress)
-        else if (i == 1){
+        else if (i == 1) {
             // the counter will be set up if it is still smaller than the size and the list but bigger than half the size of the list.
             if ((counter + 1) < (list.size()) && (counter > (list.size() - 1) / 2)) {
                 counter++;
@@ -297,9 +304,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     changes the boolean drawSelectionDiagram to true or false, depending on its state. Removes the elements of the viewoverlay, that should no longer be seen, and adds the new elements
      */
     private void setDrawSelectionDiagram() {
+        SharedPreferences.Editor editor;
         if (drawSelectionDiagram) {
             // if the menu should no longer be shown, set drawSelectionDiagram to false,
             drawSelectionDiagram = false;
+            editor = sharedPreferences.edit();
+            editor.putBoolean("menuEnabled", false);
+            editor.apply();
             // Add the okLocation to the screen, to indicate, where the okArea is
             okLocation.setBounds((int) xLongPress - 25, (int) yLongPress - 25, (int) xLongPress + 25, (int) yLongPress + 25);
             viewOverlay.add(okLocation);
@@ -308,6 +319,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else {
             // if the menu should again be shown, set drawSelectionDiagram to true,
             drawSelectionDiagram = true;
+            editor = sharedPreferences.edit();
+            editor.putBoolean("menuEnabled", true);
+            editor.apply();
             // Add the SelectionArea
             handleDrawables.drawSelectionArea(xLongPress, yLongPress);
             // and the menu/diagram to the view by calling the methods from handleDrawables.
