@@ -32,18 +32,4 @@
         android:layout_alignParentTop="true" />
 
     </FrameLayout>
-
-    <TextView
-        android:id="@+id/stringText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:text="France"
-        tools:layout_editor_absoluteX="91dp"
-        tools:layout_editor_absoluteY="83dp" />
-
-
-
-
 </RelativeLayout>
