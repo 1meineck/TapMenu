@@ -85,6 +85,7 @@ class HandleDrawables {
     private void drawBasicDiagram(Content content) {
         middleDrawable = getDrawableSelected(content); // the middle of the diagram is illustrated by the image_selected
         setDrawable(middleDrawable, middleLocation, middleSize); // the middle drawable is drawn at the middleLocation in its specified size;
+        drawables.add(middleDrawable); 
         //To draw the rest of the diagram the ArrayList with the following elements gets extracted. For every Element of the list, The image is drawn at the Location specified in the Content class.
         ArrayList<Content> list = content.getNextList();
         for (Content element : list) {
