@@ -2,14 +2,26 @@ package mis.sectorselection;
 
 
 import android.content.res.Resources;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
+import android.graphics.drawable.shapes.PathShape;
+import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.ViewOverlay;
 
 import java.util.ArrayList;
+
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static java.lang.Math.toRadians;
 
 /**
  * The HandleDrawables provides methods with which the TapMenu can be drawn. It takes the structure of objects of the class Content into account.
@@ -29,7 +41,7 @@ class HandleDrawables {
 
 
     private ShapeDrawable areaDrawable; // The drawable that illustrates the tapping area
-    private ShapeDrawable okAreaDrawable; // the drawable that illustrates the selection area
+    private ShapeDrawable pathDrawable1; // the drawable that illustrates the selection area
 
     private Drawable middleDrawable; // defines the icon in the middle
     private static final Point middleLocation = new Point(-50, -50);
@@ -52,15 +64,48 @@ class HandleDrawables {
     The Location is specified by xLongPress and yLongPress.
      */
     void drawSelectionArea(float xLongPress, float yLongPress) {
+
+        // Draw tapping area
         areaDrawable = new ShapeDrawable(new OvalShape());
         areaDrawable.getPaint().setARGB(100, 200, 200, 200);
         areaDrawable.setBounds((int) xLongPress - areaSize, (int) yLongPress - areaSize, (int) xLongPress + areaSize, (int) yLongPress + areaSize);
         viewOverlay.add(areaDrawable);
 
-        okAreaDrawable = new ShapeDrawable(new OvalShape());
-        okAreaDrawable.getPaint().setARGB(100, 150, 150, 150);
-        okAreaDrawable.setBounds((int) xLongPress - okAreaSize, (int) yLongPress - okAreaSize, (int) xLongPress + okAreaSize, (int) yLongPress + okAreaSize);
-        viewOverlay.add(okAreaDrawable);
+       /* //Calculate Segment-Points
+        float x0 = (float) (xLongPress + areaSize * cos(toRadians(0)));
+        float y0 = (float) (yLongPress + areaSize * sin(toRadians(0)));
+
+        float x1 = (float) (xLongPress + areaSize * cos(toRadians(60)));
+        float y1 = (float) (yLongPress + areaSize * sin(toRadians(60)));
+
+        float x2 = (float) (xLongPress + areaSize * cos(toRadians(120)));
+        float y2 = (float) (yLongPress + areaSize * sin(toRadians(120)));
+
+        float x3 = (float) (xLongPress + areaSize * cos(toRadians(180)));
+        float y3 = (float)(yLongPress + areaSize * sin(toRadians(180)));
+
+        float x4 = (float) (xLongPress + areaSize * cos(toRadians(240)));
+        float y4 = (float) (yLongPress + areaSize * sin(toRadians(240)));
+
+        float x5 = (float) (xLongPress + areaSize * cos(toRadians(300)));
+        float y5 = (float) (yLongPress + areaSize * sin(toRadians(300)));
+
+        // Create lines between sectors
+        Path path1 = new Path();
+        path1.moveTo(x3, y3);
+        path1.lineTo(x0, y0);
+        path1.moveTo(x2, y2);
+        path1.lineTo(x5, y5);
+        path1.moveTo(x1, y1);
+        path1.lineTo(x4, y4);
+        pathDrawable1 = new ShapeDrawable(new PathShape(path1, displayWidth, displayHeight));
+        pathDrawable1.getPaint().setStyle(Paint.Style.STROKE);
+        pathDrawable1.getPaint().setStrokeWidth(1);
+        pathDrawable1.getPaint().setARGB(255, 230, 230, 230);
+        pathDrawable1.setBounds(0, 0, displayWidth, displayHeight);
+        viewOverlay.add(pathDrawable1);
+*/
+
     }
 
     /*
@@ -68,7 +113,7 @@ class HandleDrawables {
      */
     private void removeSelectionArea(){
         viewOverlay.remove(areaDrawable);
-        viewOverlay.remove(okAreaDrawable);
+       // viewOverlay.remove(pathDrawable1);
     }
 
     /*
@@ -86,6 +131,7 @@ class HandleDrawables {
     private void drawBasicDiagram(Content content) {
         middleDrawable = getDrawableSelected(content); // the middle of the diagram is illustrated by the image_selected
         setDrawable(middleDrawable, middleLocation, middleSize); // the middle drawable is drawn at the middleLocation in its specified size;
+        drawables.add(middleDrawable);
         //To draw the rest of the diagram the ArrayList with the following elements gets extracted. For every Element of the list, The image is drawn at the Location specified in the Content class.
         ArrayList<Content> list = content.getNextList();
         for (Content element : list) {
