@@ -39,7 +39,7 @@ class ContentObjects {
         countriesList.add(createPoland());
         countriesList.add(createItaly());
 
-        countries = new Content("Countries", new LatLng(0, 0), 0, R.drawable.france, R.drawable.france_selected, middleLocation, countriesList); //ToDo: new drawable!!
+        countries = new Content("Countries", new LatLng(0, 0), 0, R.drawable.middle_drawable, R.drawable.middle_drawable, middleLocation, countriesList); //ToDo: new drawable!!
 
     }
 
@@ -71,9 +71,9 @@ class ContentObjects {
         franceCities.add(paris);
         franceCities.add(lyon);
         franceCities.add(marseilles);
-        franceCities.add(nice);
-        franceCities.add(cannes);
         franceCities.add(avignon);
+        franceCities.add(cannes);
+        franceCities.add(nice);
 
         // returns Content object of France with ArrayList of French cities as nextList.
         return new Content("France", franceCoordinates, 5, R.drawable.france, R.drawable.france_selected, item1Location, franceCities);
@@ -103,9 +103,9 @@ class ContentObjects {
         germanyCities.add(berlin);
         germanyCities.add(munich);
         germanyCities.add(hamburg);
-        germanyCities.add(cologne);
-        germanyCities.add(frankfurt);
         germanyCities.add(weimar);
+        germanyCities.add(frankfurt);
+        germanyCities.add(cologne);
 
         // returns Content object of Germany with ArrayList of German cities as nextList.
         return new Content("Germany", germanyCoordinates, 5, R.drawable.germany, R.drawable.germany_selected, item2Location, germanyCities);
@@ -135,9 +135,9 @@ class ContentObjects {
         greeceCities.add(athens);
         greeceCities.add(rhodes);
         greeceCities.add(delphi);
-        greeceCities.add(corfu);
-        greeceCities.add(sparta);
         greeceCities.add(thessaloniki);
+        greeceCities.add(sparta);
+        greeceCities.add(corfu);
 
         // returns Content object of Greece with ArrayList of Greece cities as nextList.
         return new Content("Greece", greeceCoordinates, 5, R.drawable.greece, R.drawable.greece_selected, item3Location, greeceCities);
@@ -166,9 +166,9 @@ class ContentObjects {
         italyCities.add(rome);
         italyCities.add(venice);
         italyCities.add(florence);
-        italyCities.add(pisa);
-        italyCities.add(naples);
         italyCities.add(milan);
+        italyCities.add(naples);
+        italyCities.add(pisa);
 
         // returns Content object of Italy with ArrayList of Italian cities as nextList.
         return new Content("Italy", italyCoordinates, 5, R.drawable.italy, R.drawable.italy_selected, item4Location, italyCities);
@@ -198,9 +198,9 @@ class ContentObjects {
         cities.add(warsaw);
         cities.add(krakow);
         cities.add(lublin);
-        cities.add(torun);
-        cities.add(poznan);
         cities.add(gdansk);
+        cities.add(poznan);
+        cities.add(torun);
 
         // returns Content object of Poland with ArrayList of Polish cities as nextList.
         return new Content("Poland", polandCoordinates, 5, R.drawable.poland, R.drawable.poland_selected, item5Location, cities);
@@ -230,9 +230,9 @@ class ContentObjects {
         cities.add(madrid);
         cities.add(barcelona);
         cities.add(seville);
-        cities.add(granada);
-        cities.add(palma);
         cities.add(valencia);
+        cities.add(palma);
+        cities.add(granada);
 
         // returns Content object of Spain with ArrayList of Spanish cities as nextList.
         return new Content("Spain", spainCoordinates, 5, R.drawable.spain, R.drawable.spain_selected, item6Location, cities);

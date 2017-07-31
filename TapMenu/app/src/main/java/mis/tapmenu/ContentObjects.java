@@ -39,7 +39,7 @@ class ContentObjects {
         countriesList.add(createSpain());
 
 
-        countries = new Content("Countries", new LatLng(0, 0), 0, R.drawable.france, R.drawable.france_selected, middleLocation, countriesList); //ToDo: new drawable!!
+        countries = new Content("Countries", new LatLng(0, 0), 0, R.drawable.middle_drawable, R.drawable.middle_drawable, middleLocation, countriesList); //ToDo: new drawable!!
 
     }
 
