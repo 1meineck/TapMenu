@@ -2,8 +2,6 @@ package mis.sectorselection;
 
 
 import android.content.res.Resources;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -11,9 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.PathShape;
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.ViewOverlay;
 
@@ -34,20 +29,17 @@ class HandleDrawables {
     private Resources resources;
     private ViewOverlay viewOverlay;
 
-    private static final int okAreaSize = 75; // defines the size of the area where an item can be selected
     private static final int areaSize = 400; // defines the size of the area where one needs to tap to iterate through the items
     private static final int iconSize = 100; // defines the size of the item icons
     private static final int middleSize = 75; // defines the size of the icon in the middle
 
 
     private ShapeDrawable areaDrawable; // The drawable that illustrates the tapping area
-    private ShapeDrawable pathDrawable1; // the drawable that illustrates the selection area
 
     private Drawable middleDrawable; // defines the icon in the middle
     private static final Point middleLocation = new Point(-50, -50);
 
     private ArrayList<Drawable> drawables; // List of all drawables currently on the overlay (not including middledrawable)
-    private Drawable selectedDrawable;
 
     HandleDrawables(Resources resources, ViewOverlay viewOverlay, int displayWidth, int displayHeight) {
         this.displayWidth = displayWidth;
@@ -71,7 +63,8 @@ class HandleDrawables {
         areaDrawable.setBounds((int) xLongPress - areaSize, (int) yLongPress - areaSize, (int) xLongPress + areaSize, (int) yLongPress + areaSize);
         viewOverlay.add(areaDrawable);
 
-       /* //Calculate Segment-Points
+        /* Draw sectors in the tapping-area, if needed
+        //Calculate Segment-Points
         float x0 = (float) (xLongPress + areaSize * cos(toRadians(0)));
         float y0 = (float) (yLongPress + areaSize * sin(toRadians(0)));
 
@@ -98,14 +91,13 @@ class HandleDrawables {
         path1.lineTo(x5, y5);
         path1.moveTo(x1, y1);
         path1.lineTo(x4, y4);
-        pathDrawable1 = new ShapeDrawable(new PathShape(path1, displayWidth, displayHeight));
+        ShapeDrawable pathDrawable1 = new ShapeDrawable(new PathShape(path1, displayWidth, displayHeight));
         pathDrawable1.getPaint().setStyle(Paint.Style.STROKE);
         pathDrawable1.getPaint().setStrokeWidth(1);
         pathDrawable1.getPaint().setARGB(255, 230, 230, 230);
         pathDrawable1.setBounds(0, 0, displayWidth, displayHeight);
         viewOverlay.add(pathDrawable1);
 */
-
     }
 
     /*
@@ -117,18 +109,9 @@ class HandleDrawables {
     }
 
     /*
-    draws the Diagram from a Content object with one item at a specific index selected in the List of the next Items
-     */
-    void drawDiagramArea(Content content, int index) {
-        drawBasicDiagram(content);
-        ArrayList<Content> list = content.getNextList();
-        setDrawableActive(list.get(index));
-    }
-
-    /*
     draws the basic diagram (with no selected items) from a given element of the class content.
      */
-    private void drawBasicDiagram(Content content) {
+    void drawBasicDiagram(Content content) {
         middleDrawable = getDrawableSelected(content); // the middle of the diagram is illustrated by the image_selected
         setDrawable(middleDrawable, middleLocation, middleSize); // the middle drawable is drawn at the middleLocation in its specified size;
         drawables.add(middleDrawable);
@@ -139,21 +122,6 @@ class HandleDrawables {
             setDrawable(drawable, element.getLocation(), iconSize); // The location of the image is specified through Content, the size of the icon is set.
             drawables.add(drawable); // The image is added to the drawables list for easier removal if necessary.
         }
-    }
-
-    /*
-   removes the normal image of a Content object and replaces it with the image_selected
-    */
-    void setDrawableActive(Content content) {
-        Drawable drawable = getDrawable(content);
-        viewOverlay.remove(drawable);
-        drawables.remove(drawable);
-        if (selectedDrawable != null){
-            viewOverlay.remove(selectedDrawable);
-        }
-        selectedDrawable = getDrawableSelected(content);
-        setDrawable(selectedDrawable, content.getLocation(), iconSize);
-        drawables.add(selectedDrawable);
     }
 
     /*
