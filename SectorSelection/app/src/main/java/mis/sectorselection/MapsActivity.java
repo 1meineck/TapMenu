@@ -158,7 +158,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Only if the TapMenu is open, changes will occure on Tap
         if (active) {
             handleTap(e);
-
             return true;
         }
         return false;
@@ -217,7 +216,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (drawSelectionDiagram) {
                 // if the Menu is drawn, it will be replaced by the drawing of the new activeContent, with the first element selected.
                 handleDrawables.removeDrawables();
-                handleDrawables.drawDiagramArea(activeContent, counter);
+                handleDrawables.drawBasicDiagram(activeContent);
             } else {
                 // otherwise, the timeHandler will be initiated, in case the user forgot the structure of the diagram, so the menu will be shown after a certain time without action.
                 timeHandler.postDelayed(r, 5000);
@@ -258,6 +257,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     private void setDrawSelectionDiagram() {
         SharedPreferences.Editor editor;
+        // if the TimeHandler is active, the Callbacks will be removed on Tap for the Visualization of the TapMenu is not needed.
+        if (timeHandler != null) {
+            timeHandler.removeCallbacks(r);
+        }
         if (drawSelectionDiagram) {
             // if the menu should no longer be shown, set drawSelectionDiagram to false,
             drawSelectionDiagram = false;
@@ -280,7 +283,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // Add the SelectionArea
             handleDrawables.drawSelectionArea(xLongPress, yLongPress);
             // and the menu/diagram to the view by calling the methods from handleDrawables.
-            handleDrawables.drawDiagramArea(activeContent, counter);
+            handleDrawables.drawBasicDiagram(activeContent);
             // and remove the okLocation because it is no longer needed.
             viewOverlay.remove(okLocation);
         }
@@ -318,7 +321,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (drawSelectionDiagram) {
             // if the menu should be drawn
             handleDrawables.drawSelectionArea(xLongPress, yLongPress); // draw the selection area in which to tap
-            handleDrawables.drawDiagramArea(activeContent, counter); // draw the menu with a selected element defined through the counter
+            handleDrawables.drawBasicDiagram(activeContent); // draw the menu with a selected element defined through the counter
         } else {
             // if the menu should not be drawn,
             timeHandler.postDelayed(r, 5000); // the timeHandler will be initiated, in case the user forgot the structure of the diagram, so the menu will be shown after a certain time without action.

@@ -305,6 +305,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     private void setDrawSelectionDiagram() {
         SharedPreferences.Editor editor;
+        //Remove timehandler Callbacks, if active
+        if (timeHandler != null) {
+            timeHandler.removeCallbacks(r);
+        }
+
         if (drawSelectionDiagram) {
             // if the menu should no longer be shown, set drawSelectionDiagram to false,
             drawSelectionDiagram = false;
