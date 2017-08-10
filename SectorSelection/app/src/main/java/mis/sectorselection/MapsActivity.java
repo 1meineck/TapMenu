@@ -204,6 +204,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     private void closeTapMenu() {
         viewOverlay.clear();
+        lastContent = null;
         active = false;
         mapLayout.bringToFront();
         if (timeHandler != null) {
