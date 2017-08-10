@@ -1,10 +1,13 @@
 package mis.tapmenu;
 
 import android.content.res.Resources;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
+import android.graphics.drawable.shapes.PathShape;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.ViewOverlay;
 
@@ -21,14 +24,16 @@ class HandleDrawables {
     private Resources resources;
     private ViewOverlay viewOverlay;
 
-    private static final int okAreaSize = 75; // defines the size of the area where an item can be selected
-    private static final int areaSize = 400; // defines the size of the area where one needs to tap to iterate through the items
+    private int okAreaSize; // defines the size of the area where an item can be selected
+    private int areaSize; // defines the size of the area where one needs to tap to iterate through the items
     private static final int iconSize = 100; // defines the size of the item icons
+    private static final int iconSizeSelected = 120;
     private static final int middleSize = 75; // defines the size of the icon in the middle
 
 
     private ShapeDrawable areaDrawable; // The drawable that illustrates the tapping area
     private ShapeDrawable okAreaDrawable; // the drawable that illustrates the selection area
+    private ShapeDrawable separatingLine;
 
     private Drawable middleDrawable; // defines the icon in the middle
     private static final Point middleLocation = new Point(-50, -50);
@@ -42,6 +47,9 @@ class HandleDrawables {
         this.resources = resources;
         this.viewOverlay = viewOverlay;
 
+        areaSize = displayWidth/3;
+        okAreaSize = displayWidth/12;
+
         // initialize the drawables list
         drawables = new ArrayList<>();
     }
@@ -52,12 +60,24 @@ class HandleDrawables {
      */
     void drawSelectionArea(float xLongPress, float yLongPress) {
         areaDrawable = new ShapeDrawable(new OvalShape());
-        areaDrawable.getPaint().setARGB(100, 200, 200, 200);
+        areaDrawable.getPaint().setARGB(200, 200, 200, 200);
         areaDrawable.setBounds((int) xLongPress - areaSize, (int) yLongPress - areaSize, (int) xLongPress + areaSize, (int) yLongPress + areaSize);
         viewOverlay.add(areaDrawable);
 
+        Path path = new Path();
+        path.moveTo(xLongPress - areaSize, yLongPress);
+        path.lineTo(xLongPress - okAreaSize, yLongPress);
+        path.moveTo(xLongPress + okAreaSize, yLongPress);
+        path.lineTo(xLongPress + areaSize, yLongPress);
+        separatingLine = new ShapeDrawable(new PathShape(path, displayWidth, displayHeight));
+        separatingLine.getPaint().setStyle(Paint.Style.STROKE);
+        separatingLine.getPaint().setStrokeWidth(3);
+        separatingLine.getPaint().setARGB(255, 230, 230, 230);
+        separatingLine.setBounds(0, 0, displayWidth, displayHeight);
+        viewOverlay.add(separatingLine);
+
         okAreaDrawable = new ShapeDrawable(new OvalShape());
-        okAreaDrawable.getPaint().setARGB(100, 150, 150, 150);
+        okAreaDrawable.getPaint().setARGB(200, 150, 150, 150);
         okAreaDrawable.setBounds((int) xLongPress - okAreaSize, (int) yLongPress - okAreaSize, (int) xLongPress + okAreaSize, (int) yLongPress + okAreaSize);
         viewOverlay.add(okAreaDrawable);
     }
@@ -68,6 +88,7 @@ class HandleDrawables {
     private void removeSelectionArea(){
         viewOverlay.remove(areaDrawable);
         viewOverlay.remove(okAreaDrawable);
+        viewOverlay.remove(separatingLine);
     }
 
     /*
@@ -106,7 +127,7 @@ class HandleDrawables {
             viewOverlay.remove(selectedDrawable);
         }
         selectedDrawable = getDrawableSelected(content);
-        setDrawable(selectedDrawable, content.getLocation(), iconSize);
+        setDrawable(selectedDrawable, content.getLocation(), iconSizeSelected);
         drawables.add(selectedDrawable);
     }
 

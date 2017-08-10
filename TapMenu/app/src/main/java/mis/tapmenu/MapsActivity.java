@@ -40,18 +40,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private boolean drawSelectionDiagram = true;
 
     private ContentObjects co;
+    private Content lastContent;
     private Content activeContent;
     private Content currentSelection;
     private int counter;
 
     private ViewOverlay viewOverlay;
 
+    private int displayWidth;
+    private int displayHeight;
+
     private float xLongPress;
     private float yLongPress;
 
-    private static final int okAreaSize = 75;
-    private static final int areaSize = 400;
-    private static final int closeDistance = 600;
+    private int okAreaSize;
+    private int areaSize;
+    private int closeDistance;
 
     private Handler timeHandler;
     private Runnable r;
@@ -89,8 +93,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        int displayWidth = size.x;
-        int displayHeight = size.y;
+        displayWidth = size.x;
+        displayHeight = size.y;
+
+        areaSize = displayWidth/3;
+        okAreaSize = displayWidth/12;
+        closeDistance = displayWidth * 3/7;
 
         // An Object of the class HandleDrawables is created with the resources, the viewOverlay and the size of the display.
         // The object is later used to handle everything related to the drawing of the TapMenu
@@ -201,9 +209,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (drawSelectionDiagram) {
                 handleDrawables.setDrawableActive(currentSelection);
             }
-        } else if (distance > closeDistance) {
-            // if the tap is outside the specified distance, the closeTapMenu function is called and the whole Menu closes
-            closeTapMenu();
+        } else if (distance > closeDistance)
+        {
+            if (lastContent != null) {
+                handleBack();
+            } else {
+                closeTapMenu();
+            }
         }
     }
 
@@ -215,24 +227,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @param i
      */
     private void setCounter(ArrayList<Content> list, int i) {
-        //tap was over the Original opening Location (LongPress)
+        //tap was over the Original opening Location (LongPress), counter will be set up
         if (i == 0) {
-            if ((counter + 1) <= ((list.size() - 1) / 2)) {
-                // the counter will be set up if it is still smaller than half the size of the list.
+            if ((counter + 1) <= list.size()-1) {
                 counter++;
             } else {
-                // if the counter is bigger than half the size of the list, it will be set back to 0, to ensure iteration over only the top-half of the list.
                 counter = 0;
             }
         }
-        // Tap was beneath the original opening Location (LongPress)
+        // Tap was beneath the original opening Location (LongPress), counter will be set down
         else if (i == 1) {
-            // the counter will be set up if it is still smaller than the size and the list but bigger than half the size of the list.
-            if ((counter + 1) < (list.size()) && (counter > (list.size() - 1) / 2)) {
-                counter++;
+            if ((counter - 1) >= 0) {
+                counter--;
             } else {
-                // if the counter is smaller than half the size of the list, it will be set on half the size of the list + 1;
-                counter = (list.size() - 1) / 2 + 1;
+                counter = list.size()-1;
             }
         }
 
@@ -255,6 +263,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      @param selection     the Content that is slected. Will define where the map will zoom in, and if/how the Menu will be drawn.
      */
     private void handleOK(Content selection) {
+        lastContent = activeContent; // save the parent of the new selection to return if necessary.
         activeContent = selection; // will set the avtiveContent to the selection.
         counter = 0; // counter will be set to 0
         zoomIn(selection); // zoomIn will be called to move the camera to the right position on the map.
@@ -274,6 +283,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Toast.makeText(this, selection.getName(), Toast.LENGTH_SHORT).show();
             closeTapMenu();
         }
+    }
+
+    private void handleBack(){
+        activeContent = lastContent;
+        lastContent = null;
+        counter = 0;
+        zoomIn(activeContent);
+        handleDrawables.removeDrawables();
+        handleDrawables.drawDiagramArea(activeContent, counter);
     }
 
     // moves the Camera to the position saved in the selection, with the zoomFactor also saved in the selection
@@ -349,6 +367,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // set xLongPress and yLongPress. Needed for the Drawing of the SelectionArea, as well as for the handling of Taps.
         xLongPress = e.x;
         yLongPress = e.y;
+        if (xLongPress + areaSize > displayWidth){
+            xLongPress = displayWidth-areaSize;
+        }
+        else if (xLongPress - areaSize < 0){
+            xLongPress = areaSize;
+        }
+        if (yLongPress + areaSize > displayHeight){
+            yLongPress = displayHeight - areaSize;
+        } else if (yLongPress - areaSize/2 < displayHeight/2){
+            yLongPress = displayHeight*3/5;
+        }
 
         counter = 0; // the counter will be set to 0
 

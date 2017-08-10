@@ -29,12 +29,13 @@ class HandleDrawables {
     private Resources resources;
     private ViewOverlay viewOverlay;
 
-    private static final int areaSize = 400; // defines the size of the area where one needs to tap to iterate through the items
+    private int areaSize; // defines the size of the area where one needs to tap to iterate through the items
     private static final int iconSize = 100; // defines the size of the item icons
     private static final int middleSize = 75; // defines the size of the icon in the middle
 
 
     private ShapeDrawable areaDrawable; // The drawable that illustrates the tapping area
+    private ShapeDrawable sectorLines;
 
     private Drawable middleDrawable; // defines the icon in the middle
     private static final Point middleLocation = new Point(-50, -50);
@@ -46,6 +47,9 @@ class HandleDrawables {
         this.displayHeight = displayHeight;
         this.resources = resources;
         this.viewOverlay = viewOverlay;
+
+        // set the areaSize for the selection area;
+        areaSize = displayWidth/3;
 
         // initialize the drawables list
         drawables = new ArrayList<>();
@@ -59,11 +63,11 @@ class HandleDrawables {
 
         // Draw tapping area
         areaDrawable = new ShapeDrawable(new OvalShape());
-        areaDrawable.getPaint().setARGB(100, 200, 200, 200);
+        areaDrawable.getPaint().setARGB(200, 200, 200, 200);
         areaDrawable.setBounds((int) xLongPress - areaSize, (int) yLongPress - areaSize, (int) xLongPress + areaSize, (int) yLongPress + areaSize);
         viewOverlay.add(areaDrawable);
 
-        /* Draw sectors in the tapping-area, if needed
+
         //Calculate Segment-Points
         float x0 = (float) (xLongPress + areaSize * cos(toRadians(0)));
         float y0 = (float) (yLongPress + areaSize * sin(toRadians(0)));
@@ -91,13 +95,13 @@ class HandleDrawables {
         path1.lineTo(x5, y5);
         path1.moveTo(x1, y1);
         path1.lineTo(x4, y4);
-        ShapeDrawable pathDrawable1 = new ShapeDrawable(new PathShape(path1, displayWidth, displayHeight));
-        pathDrawable1.getPaint().setStyle(Paint.Style.STROKE);
-        pathDrawable1.getPaint().setStrokeWidth(1);
-        pathDrawable1.getPaint().setARGB(255, 230, 230, 230);
-        pathDrawable1.setBounds(0, 0, displayWidth, displayHeight);
-        viewOverlay.add(pathDrawable1);
-*/
+        sectorLines = new ShapeDrawable(new PathShape(path1, displayWidth, displayHeight));
+        sectorLines.getPaint().setStyle(Paint.Style.STROKE);
+        sectorLines.getPaint().setStrokeWidth(3);
+        sectorLines.getPaint().setARGB(255, 230, 230, 230);
+        sectorLines.setBounds(0, 0, displayWidth, displayHeight);
+        viewOverlay.add(sectorLines);
+
     }
 
     /*
@@ -105,7 +109,8 @@ class HandleDrawables {
      */
     private void removeSelectionArea(){
         viewOverlay.remove(areaDrawable);
-       // viewOverlay.remove(pathDrawable1);
+        viewOverlay.remove(sectorLines);
+       // viewOverlay.remove(sectorLines);
     }
 
     /*
