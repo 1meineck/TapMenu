@@ -288,8 +288,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void handleBack(){
         activeContent = lastContent;
-        lastContent = null;
         counter = 0;
+        currentSelection = activeContent.getNextList().get(counter);
+        lastContent = null;
         zoomIn(activeContent);
         handleDrawables.removeDrawables();
         handleDrawables.drawDiagramArea(activeContent, counter);

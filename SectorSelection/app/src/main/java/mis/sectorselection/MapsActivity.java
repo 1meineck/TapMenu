@@ -242,7 +242,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void handleBack(){
         activeContent = lastContent;
         lastContent = null;
-        counter = 0;
         zoomIn(activeContent);
         handleDrawables.removeDrawables();
         handleDrawables.drawBasicDiagram(activeContent);
@@ -333,7 +332,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (yLongPress + areaSize > displayHeight){
             yLongPress = displayHeight - areaSize;
         } else if (yLongPress - areaSize/2 < displayHeight/2){
-            yLongPress = displayHeight/2;
+            yLongPress = displayHeight*3/5;
         }
 
         counter = 0; // the counter will be set to 0
